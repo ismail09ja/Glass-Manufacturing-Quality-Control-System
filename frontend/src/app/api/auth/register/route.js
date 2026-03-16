@@ -28,6 +28,7 @@ export async function POST(request) {
             token: generateToken(user._id),
         }, { status: 201 });
     } catch (error) {
+        console.error("REGISTER ERROR:", error);
         return NextResponse.json(
             { message: error?.message || 'Internal Server Error' },
             { status: 500 }

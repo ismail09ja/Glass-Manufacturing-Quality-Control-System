@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import * as bcrypt from 'bcryptjs';
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
     name: { type: String, required: [true, 'Name is required'], trim: true },
@@ -12,13 +12,23 @@ userSchema.index({ role: 1 });
 
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    
+    // Use Node native crypto to bypass Webpack minification bugs
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.scryptSync(this.password, salt, 64).toString('hex');
+    this.password = `${salt}:${hash}`;
+    
     next();
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+    if (!this.password.includes(':')) {
+        // Fallback for old bcrypt passwords if any exist (will fail on Vercel due to minification, but prevents crash)
+        return false;
+    }
+    const [salt, storedHash] = this.password.split(':');
+    const hashToVerify = crypto.scryptSync(enteredPassword, salt, 64).toString('hex');
+    return hashToVerify === storedHash;
 };
 
 export default mongoose.models.User || mongoose.model('User', userSchema);
