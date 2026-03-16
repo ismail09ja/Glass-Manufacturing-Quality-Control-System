@@ -26,6 +26,9 @@ export async function POST(request) {
             return NextResponse.json({ message: 'Invalid email or password' }, { status: 401 });
         }
     } catch (error) {
-        return NextResponse.json({ message: error.message }, { status: 500 });
+        return NextResponse.json(
+            { message: error?.message || 'Internal Server Error' },
+            { status: 500 }
+        );
     }
 }

@@ -28,6 +28,9 @@ export async function POST(request) {
             token: generateToken(user._id),
         }, { status: 201 });
     } catch (error) {
-        return NextResponse.json({ message: error.message }, { status: 500 });
+        return NextResponse.json(
+            { message: error?.message || 'Internal Server Error' },
+            { status: 500 }
+        );
     }
 }
