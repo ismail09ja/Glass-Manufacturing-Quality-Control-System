@@ -1,6 +1,6 @@
 # Professional Presentation Guide: Glass Manufacturing Quality Control System
 
-This document explains the industrial logic and technical architecture of your project. Use this as a script or reference for your presentation to professors.
+This document explains the industrial logic and technical architecture of my project. 
 
 ---
 
@@ -48,5 +48,5 @@ Real-world factories have "separation of duties." We implemented this to prevent
 
 ---
 
-## 5. Summary for Professors
+## 5. Summary 
 > "This project demonstrates an end-to-end industrial software solution. It covers **Full-Stack Development** (React/Node/Express), **Cloud-Ready Deployment** (Docker/CI-CD), **Data Engineering** (NoSQL modeling), and **Business Logic** (RBAC and automated alerting)."
